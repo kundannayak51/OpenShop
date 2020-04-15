@@ -1,0 +1,17 @@
+<resources>
+    <string name="app_name">Open Shop</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="email">Email ID</string>
+    <string name="password">Password (atleast 8 characters)</string>
+    <string name="confirmPassword">Confirm Password</string>
+    <string name="forgot_Password">Forgot Password?</string>
+    <string name="signIn_Btn">Sign In</string>
+    <string name="signUp_Btn">Sign Up!</string>
+    <string name="noAccount">Dont have an Account?Sign Up!</string>
+    <string name="alreadyAccount">Already have an Account?Sign In!</string>
+    <string name="reset_email">Enter your registered Email!</string>
+    <string name="reset_pass">RESET PASSWORD</string>
+    <string name="fullName">Full Name</string>
+</resources>

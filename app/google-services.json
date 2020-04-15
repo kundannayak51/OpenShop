@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "1077085921034",
+    "firebase_url": "https://mnnit-openshop.firebaseio.com",
+    "project_id": "mnnit-openshop",
+    "storage_bucket": "mnnit-openshop.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1077085921034:android:04c668c72701fe877864f3",
+        "android_client_info": {
+          "package_name": "com.example.openshop"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1077085921034-pjv43sbd1ab894cusalhri79ihdma1d8.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDlt2QBIL2UQ9mC93AtfKEVDdLb8-n28p0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1077085921034-pjv43sbd1ab894cusalhri79ihdma1d8.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
