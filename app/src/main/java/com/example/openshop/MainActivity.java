@@ -27,16 +27,20 @@ import androidx.appcompat.widget.Toolbar;
 
 import android.view.Menu;
 import android.widget.FrameLayout;
+import android.widget.ImageView;
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener{
 
     private static final int HOME_FRAGMENT = 0;
     private static final int CART_FRAGMENT = 1;
+    private static final int ORDERS_FRAGMENT = 2;
+    private static final int WISHLIST_FRAGMENT = 3 ;
 
     private AppBarConfiguration mAppBarConfiguration;
     private FrameLayout frameLayout;
+    private ImageView actionBarLogo;
 
-    private static int currentFragment;
+    private static int currentFragment = -1;
 
     private NavigationView navigationView;
     //private DrawerLayout drawer;
@@ -55,7 +59,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             return true;
         }else if(id == R.id.main_cart_icon) {
             //code for cart icon
-            myCart();
+            gotoFragment("My Cart",new MyCartFragment(),CART_FRAGMENT);
             return true;
         }
 
@@ -70,8 +74,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         Toolbar toolbar = findViewById(R.id.toolbar);
+        actionBarLogo = findViewById(R.id.actionbar_logo);
         setSupportActionBar(toolbar);
-        getSupportActionBar().setDisplayShowTitleEnabled(false);
+
 
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
         navigationView = (NavigationView)findViewById(R.id.nav_view);
@@ -98,9 +103,30 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     }
 
     @Override
+    public void onBackPressed() {
+        DrawerLayout drawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
+        if(drawerLayout.isDrawerOpen(GravityCompat.START)){
+            drawerLayout.closeDrawer(GravityCompat.START);
+        }else{
+            if(currentFragment == HOME_FRAGMENT){
+                super.onBackPressed();
+            }else{
+                actionBarLogo.setVisibility(View.VISIBLE);
+                invalidateOptionsMenu();
+                setFragment(new HomePageFragment(), HOME_FRAGMENT);
+                navigationView.getMenu().getItem(0).setChecked(true);
+
+            }
+        }
+
+    }
+
+    @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         if(currentFragment == HOME_FRAGMENT){
+            getSupportActionBar().setDisplayShowTitleEnabled(false);
+
             getMenuInflater().inflate(R.menu.main, menu);
 
         }
@@ -124,17 +150,23 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
 
         if(id == R.id.nav_open_shop){
+            //Hiding title and showing logo
+            actionBarLogo.setVisibility(View.VISIBLE);
+            invalidateOptionsMenu();
             setFragment(new HomePageFragment(), HOME_FRAGMENT);
 
         }else if(id == R.id.nav_my_orders){
-
-        }else if(id == R.id.nav_my_rewards){
-
-        }else if(id == R.id.nav_my_cart){
+            gotoFragment("My Orders",new MyOrdersFragment(),ORDERS_FRAGMENT);
+          }
+//        else if(id == R.id.nav_my_rewards){
+//
+//        }
+         else if(id == R.id.nav_my_cart){
             //System.out.println("AAAAA\n");
-             myCart();
+             gotoFragment("My Cart",new MyCartFragment(),CART_FRAGMENT);
 
         }else if(id == R.id.nav_my_wishlist){
+            gotoFragment("My Wishlist",new MyWishlistFragment(),WISHLIST_FRAGMENT);
 
         }else if(id == R.id.nav_my_account){
 
@@ -149,16 +181,21 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     private void setFragment(Fragment fragment, int fragmentNo)
     {
-        currentFragment = fragmentNo;
-        FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
-        fragmentTransaction.replace(frameLayout.getId(),fragment);
-        fragmentTransaction.commit();
+        if(fragmentNo != currentFragment){
+            currentFragment = fragmentNo;
+            FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
+            fragmentTransaction.setCustomAnimations(R.anim.fade_in,R.anim.fade_out);
+            fragmentTransaction.replace(frameLayout.getId(),fragment);
+            fragmentTransaction.commit();
+        }
     }
 
-    private void myCart() {
-
+    private void gotoFragment(String title,Fragment fragment,int fragmentNo) {
+        getSupportActionBar().setDisplayShowTitleEnabled(true);
+        getSupportActionBar().setTitle(title);
+        actionBarLogo.setVisibility(View.GONE);
         invalidateOptionsMenu();
-        setFragment(new MyCartFragment(),  CART_FRAGMENT);
-        navigationView.getMenu().getItem(3).setChecked(true);
+        setFragment(fragment,  fragmentNo);
+
     }
 }
