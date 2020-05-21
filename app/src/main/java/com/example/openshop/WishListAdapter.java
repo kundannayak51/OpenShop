@@ -1,5 +1,6 @@
 package com.example.openshop;
 
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,10 +15,12 @@ import java.util.List;
 
 public class WishListAdapter extends RecyclerView.Adapter<WishListAdapter.ViewHolder> {
 
-    List<WishListModel> wishListModelList;
+    private List<WishListModel> wishListModelList;
+    private Boolean wishlist;
 
-    public WishListAdapter(List<WishListModel> wishListModelList) {
+    public WishListAdapter(List<WishListModel> wishListModelList, Boolean wishlist) {
         this.wishListModelList = wishListModelList;
+        this.wishlist = wishlist;
     }
 
     @NonNull
@@ -70,12 +73,34 @@ public class WishListAdapter extends RecyclerView.Adapter<WishListAdapter.ViewHo
             productPrice.setText(price);
             cuttedPrice.setText(cutPrice);
 
-            deleteBtn.setOnClickListener(new View.OnClickListener() {
+            itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Toast.makeText(itemView.getContext(),"delete",Toast.LENGTH_SHORT).show();
+                    //System.out.println("AAAAA\n");
+                    Intent productDetailsIntent = new Intent(itemView.getContext(),ProductsDetailActivity.class);
+                    itemView.getContext().startActivity(productDetailsIntent);
                 }
             });
+            // if this is used as wishlist adapter then only delete Btn will be visible
+            if(wishlist){
+                //System.out.println("QQQQMMM\n");
+                deleteBtn.setVisibility(View.VISIBLE);
+            }else{
+                //System.out.println("QQQQ\n");
+                deleteBtn.setVisibility(View.GONE);
+            }
+
+            if(wishlist){
+                deleteBtn.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Toast.makeText(itemView.getContext(),"delete",Toast.LENGTH_SHORT).show();
+                    }
+                });
+            }
+
+
+
 
         }
     }

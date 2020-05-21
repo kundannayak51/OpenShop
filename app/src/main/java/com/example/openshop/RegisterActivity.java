@@ -11,6 +11,7 @@ import android.widget.FrameLayout;
 public class RegisterActivity extends AppCompatActivity {
 
     private FrameLayout frameLayout;
+    public static  boolean setSignUpFragment = false;
 
     protected static boolean onResetPasswordFragment = false;
     protected static boolean onSignUpFragment = false;
@@ -22,8 +23,14 @@ public class RegisterActivity extends AppCompatActivity {
         //getting ID of frameLayout in of design part
         frameLayout = findViewById(R.id.register_frameLaayout);
 
+        if(setSignUpFragment){
+            setSignUpFragment = false;
+            setDefaultFragment(new SignupFragment());
+        }else{
+            setDefaultFragment(new SigninFragment());
+        }
         //function to set fragment into the layout
-        setDefaultFragment(new SigninFragment());
+        //setDefaultFragment(new SigninFragment());
     }
     private void setDefaultFragment(Fragment fragment){
         FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();

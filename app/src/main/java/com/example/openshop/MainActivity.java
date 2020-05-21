@@ -1,5 +1,7 @@
 package com.example.openshop;
 
+import android.app.Dialog;
+import android.content.Intent;
 import android.os.Bundle;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -26,8 +28,12 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
 import android.view.Menu;
+import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
+
+import static com.example.openshop.RegisterActivity.setSignUpFragment;
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener{
 
@@ -36,12 +42,13 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private static final int ORDERS_FRAGMENT = 2;
     private static final int WISHLIST_FRAGMENT = 3 ;
     private static final int ACCOUNT_FRAGMENT = 4;
+    public static Boolean showCart = false;
 
     private AppBarConfiguration mAppBarConfiguration;
     private FrameLayout frameLayout;
     private ImageView actionBarLogo;
 
-    private static int currentFragment = -1;
+    private int currentFragment = -1;
 
     private NavigationView navigationView;
     //private DrawerLayout drawer;
@@ -60,8 +67,43 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             return true;
         }else if(id == R.id.main_cart_icon) {
             //code for cart icon
-            gotoFragment("My Cart",new MyCartFragment(),CART_FRAGMENT);
+            final Dialog signInDialog = new Dialog(MainActivity.this);
+            signInDialog.setContentView(R.layout.sign_in_dialog);
+            //when user click anywhere else on the screen this dialog should cancelled
+            signInDialog.setCancelable(true);
+            signInDialog.getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT,ViewGroup.LayoutParams.WRAP_CONTENT);
+
+            Button dialogSignInBtn = signInDialog.findViewById(R.id.sign_in_dialog_btn);
+            Button dialogSignUpBtn = signInDialog.findViewById(R.id.sign_up_dialog_btn);
+            final Intent registerIntent = new Intent(MainActivity.this,RegisterActivity.class);
+
+            dialogSignInBtn.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    signInDialog.dismiss();
+                    setSignUpFragment = false;
+                    startActivity(registerIntent);
+                }
+            });
+
+            dialogSignUpBtn.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    signInDialog.dismiss();
+                    setSignUpFragment = true;
+                    startActivity(registerIntent);
+                }
+            });
+            signInDialog.show();
+
+           // gotoFragment("My Cart",new MyCartFragment(),CART_FRAGMENT);
             return true;
+        }else if(id == android.R.id.home){
+            if(showCart){
+                showCart = false;
+                finish();
+                return true;
+            }
         }
 
 
@@ -79,18 +121,11 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         setSupportActionBar(toolbar);
 
 
-        DrawerLayout drawer = findViewById(R.id.drawer_layout);
+
         navigationView = (NavigationView)findViewById(R.id.nav_view);
 
-        // Passing each menu ID as a set of Ids because each
-        // menu should be considered as top level destinations.
-        mAppBarConfiguration = new AppBarConfiguration.Builder(
-                R.id.nav_home, R.id.nav_gallery, R.id.nav_slideshow,
-                R.id.nav_tools, R.id.nav_share, R.id.nav_send)
-                .setDrawerLayout(drawer)
-                .build();
+
         NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment);
-        NavigationUI.setupActionBarWithNavController(this, navController, mAppBarConfiguration);
         NavigationUI.setupWithNavController(navigationView, navController);
 
         navigationView.setNavigationItemSelectedListener(this);
@@ -99,8 +134,26 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         frameLayout = findViewById(R.id.nav_host_fragment);
 
-        //on create HomePage Fragment is set
-        setFragment(new HomePageFragment(),HOME_FRAGMENT);
+        if(showCart){
+            //drawer.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+            gotoFragment("My Cart",new MyCartFragment(),-2);
+        }else{
+            //on create HomePage Fragment is set
+            DrawerLayout drawer = findViewById(R.id.drawer_layout);
+            // Passing each menu ID as a set of Ids because each
+            // menu should be considered as top level destinations.
+            mAppBarConfiguration = new AppBarConfiguration.Builder(
+                    R.id.nav_home, R.id.nav_gallery, R.id.nav_slideshow,
+                    R.id.nav_tools, R.id.nav_share, R.id.nav_send)
+                    .setDrawerLayout(drawer)
+                    .build();
+            NavigationUI.setupActionBarWithNavController(this, navController, mAppBarConfiguration);
+
+            setFragment(new HomePageFragment(),HOME_FRAGMENT);
+        }
+
+
     }
 
     @Override
@@ -110,12 +163,18 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             drawerLayout.closeDrawer(GravityCompat.START);
         }else{
             if(currentFragment == HOME_FRAGMENT){
+                currentFragment = -1;
                 super.onBackPressed();
             }else{
-                actionBarLogo.setVisibility(View.VISIBLE);
-                invalidateOptionsMenu();
-                setFragment(new HomePageFragment(), HOME_FRAGMENT);
-                navigationView.getMenu().getItem(0).setChecked(true);
+                if(showCart){
+                    showCart=false;
+                    finish();
+                }else {
+                    actionBarLogo.setVisibility(View.VISIBLE);
+                    invalidateOptionsMenu();
+                    setFragment(new HomePageFragment(), HOME_FRAGMENT);
+                    navigationView.getMenu().getItem(0).setChecked(true);
+                }
 
             }
         }

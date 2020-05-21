@@ -10,13 +10,13 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 
-public class AddressActivity extends AppCompatActivity {
+public class AddAddressActivity extends AppCompatActivity {
     private Button saveButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_address);
+        setContentView(R.layout.activity_add_address);
 
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -28,7 +28,7 @@ public class AddressActivity extends AppCompatActivity {
         saveButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent deliveryIntent = new Intent(AddressActivity.this,DeliveryActivity.class);
+                Intent deliveryIntent = new Intent(AddAddressActivity.this,DeliveryActivity.class);
                 startActivity(deliveryIntent);
                 finish();
             }

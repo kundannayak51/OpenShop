@@ -45,8 +45,14 @@ public class MyWishlistFragment extends Fragment {
         wishListModelList.add(new WishListModel(R.drawable.productimage,"iPhone XR thr","Rs 49999","Rs 59999"));
         wishListModelList.add(new WishListModel(R.drawable.productimage,"iPhone  wegwh","Rs 49999","Rs 59999"));
         wishListModelList.add(new WishListModel(R.drawable.productimage,"iPhone XR trtn","Rs 49999","Rs 59999"));
+        wishListModelList.add(new WishListModel(R.drawable.productimage,"iPhone XRdd","Rs 49999","Rs 59999"));
+        wishListModelList.add(new WishListModel(R.drawable.banner,"iPhone XR ffd","Rs 49999","Rs 59999"));
+        wishListModelList.add(new WishListModel(R.drawable.productimage,"iPhone XR rgerh","Rs 49999","Rs 59999"));
+        wishListModelList.add(new WishListModel(R.drawable.productimage,"iPhone XR thr","Rs 49999","Rs 59999"));
+        wishListModelList.add(new WishListModel(R.drawable.productimage,"iPhone  wegwh","Rs 49999","Rs 59999"));
+        wishListModelList.add(new WishListModel(R.drawable.productimage,"iPhone XR trtn","Rs 49999","Rs 59999"));
 
-        WishListAdapter wishListAdapter = new WishListAdapter(wishListModelList);
+        WishListAdapter wishListAdapter = new WishListAdapter(wishListModelList,true);
         wishlistRecyclerView.setAdapter(wishListAdapter);
         wishListAdapter.notifyDataSetChanged();
 

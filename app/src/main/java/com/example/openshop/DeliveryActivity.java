@@ -6,6 +6,7 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
@@ -18,6 +19,7 @@ public class DeliveryActivity extends AppCompatActivity {
 
     private RecyclerView deliveryRecyclerView;
     private Button addressBtn;
+    public static final int SELECT_ADDRESS = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,6 +53,16 @@ public class DeliveryActivity extends AppCompatActivity {
         cartAdapter.notifyDataSetChanged();
 
         addressBtn.setVisibility(View.VISIBLE);
+
+        addressBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent myAddressIntent = new Intent(DeliveryActivity.this,MyAddressesActivity.class);
+                myAddressIntent.putExtra("MODE",SELECT_ADDRESS);
+                startActivity(myAddressIntent);
+
+            }
+        });
     }
 
     @Override
