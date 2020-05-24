@@ -1,9 +1,17 @@
 package com.example.openshop;
 
 import android.app.Dialog;
+import android.content.Context;
 import android.content.Intent;
+import android.net.ConnectivityManager;
+import android.net.Network;
+import android.net.NetworkCapabilities;
+import android.net.NetworkInfo;
+import android.net.NetworkRequest;
+import android.os.Build;
 import android.os.Bundle;
 
+import com.bumptech.glide.Glide;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
 
@@ -47,6 +55,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private AppBarConfiguration mAppBarConfiguration;
     private FrameLayout frameLayout;
     private ImageView actionBarLogo;
+    private ImageView noInternetConnection;
+    private ConnectivityManager connectivityManager;
+    private ConnectivityManager.NetworkCallback mCallback;
+    private static boolean checkNetwork = false;
 
     private int currentFragment = -1;
 
@@ -133,24 +145,33 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         navigationView.getMenu().getItem(0).setChecked(true);
 
         frameLayout = findViewById(R.id.nav_host_fragment);
+        noInternetConnection = findViewById(R.id.no_internet_connection);
 
-        if(showCart){
-            //drawer.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
-            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-            gotoFragment("My Cart",new MyCartFragment(),-2);
+        //connectivityManager = (ConnectivityManager)getSystemService(Context.CONNECTIVITY_SERVICE);
+        //Network network = connectivityManager.getActiveNetwork();
+        if(isNetworkConnected()){
+            noInternetConnection.setVisibility(View.GONE);
+            if(showCart){
+                //drawer.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
+                getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+                gotoFragment("My Cart",new MyCartFragment(),-2);
+            }else{
+                //on create HomePage Fragment is set
+                DrawerLayout drawer = findViewById(R.id.drawer_layout);
+                // Passing each menu ID as a set of Ids because each
+                // menu should be considered as top level destinations.
+                mAppBarConfiguration = new AppBarConfiguration.Builder(
+                        R.id.nav_home, R.id.nav_gallery, R.id.nav_slideshow,
+                        R.id.nav_tools, R.id.nav_share, R.id.nav_send)
+                        .setDrawerLayout(drawer)
+                        .build();
+                NavigationUI.setupActionBarWithNavController(this, navController, mAppBarConfiguration);
+
+                setFragment(new HomePageFragment(),HOME_FRAGMENT);
+            }
         }else{
-            //on create HomePage Fragment is set
-            DrawerLayout drawer = findViewById(R.id.drawer_layout);
-            // Passing each menu ID as a set of Ids because each
-            // menu should be considered as top level destinations.
-            mAppBarConfiguration = new AppBarConfiguration.Builder(
-                    R.id.nav_home, R.id.nav_gallery, R.id.nav_slideshow,
-                    R.id.nav_tools, R.id.nav_share, R.id.nav_send)
-                    .setDrawerLayout(drawer)
-                    .build();
-            NavigationUI.setupActionBarWithNavController(this, navController, mAppBarConfiguration);
-
-            setFragment(new HomePageFragment(),HOME_FRAGMENT);
+            Glide.with(this).load(R.drawable.nointernet).into(noInternetConnection);
+            noInternetConnection.setVisibility(View.VISIBLE);
         }
 
 
@@ -258,5 +279,30 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         invalidateOptionsMenu();
         setFragment(fragment,  fragmentNo);
 
+    }
+
+    public boolean isNetworkConnected() {
+
+        final ConnectivityManager cm = (ConnectivityManager)getSystemService(Context.CONNECTIVITY_SERVICE);
+
+        if (cm != null) {
+            if (Build.VERSION.SDK_INT < 23) {
+                final NetworkInfo ni = cm.getActiveNetworkInfo();
+
+                if (ni != null) {
+                    return (ni.isConnected() && (ni.getType() == ConnectivityManager.TYPE_WIFI || ni.getType() == ConnectivityManager.TYPE_MOBILE));
+                }
+            } else {
+                final Network n = cm.getActiveNetwork();
+
+                if (n != null) {
+                    final NetworkCapabilities nc = cm.getNetworkCapabilities(n);
+
+                    return (nc.hasTransport(NetworkCapabilities.TRANSPORT_CELLULAR) || nc.hasTransport(NetworkCapabilities.TRANSPORT_WIFI));
+                }
+            }
+        }
+
+        return false;
     }
 }

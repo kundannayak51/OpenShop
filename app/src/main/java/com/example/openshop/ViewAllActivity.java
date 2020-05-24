@@ -65,16 +65,6 @@ public class ViewAllActivity extends AppCompatActivity {
             //recyclerView.setVisibility(View.GONE);
             gridView.setVisibility(View.VISIBLE);
             List<HorizontalProductScrollModel> horizontalProductScrollModelList = new ArrayList<>();
-            horizontalProductScrollModelList.add(new HorizontalProductScrollModel(R.drawable.banner,"Redmi 5A","SD 625 Processor","Rs 5999"));
-            horizontalProductScrollModelList.add(new HorizontalProductScrollModel(R.drawable.banner,"Redmi 6A","SD 625 Processor","Rs 5999"));
-            horizontalProductScrollModelList.add(new HorizontalProductScrollModel(R.drawable.banner,"Redmi 7A","SD 625 Processor","Rs 5999"));
-            horizontalProductScrollModelList.add(new HorizontalProductScrollModel(R.drawable.banner,"Redmi 8A","SD 625 Processor","Rs 5999"));
-            horizontalProductScrollModelList.add(new HorizontalProductScrollModel(R.drawable.banner,"Redmi 9A","SD 625 Processor","Rs 5999"));
-            horizontalProductScrollModelList.add(new HorizontalProductScrollModel(R.drawable.banner,"Redmi 5A","SD 625 Processor","Rs 5999"));
-            horizontalProductScrollModelList.add(new HorizontalProductScrollModel(R.drawable.banner,"Redmi 6A","SD 625 Processor","Rs 5999"));
-            horizontalProductScrollModelList.add(new HorizontalProductScrollModel(R.drawable.banner,"Redmi 7A","SD 625 Processor","Rs 5999"));
-            horizontalProductScrollModelList.add(new HorizontalProductScrollModel(R.drawable.banner,"Redmi 8A","SD 625 Processor","Rs 5999"));
-            horizontalProductScrollModelList.add(new HorizontalProductScrollModel(R.drawable.banner,"Redmi 9A","SD 625 Processor","Rs 5999"));
 
             GridProductLayoutAdapter gridProductLayoutAdapter = new GridProductLayoutAdapter(horizontalProductScrollModelList);
             gridView.setAdapter(gridProductLayoutAdapter);
